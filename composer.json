@@ -1,0 +1,27 @@
+{
+	"name": "showpro/silverstripe-image-optimiser",
+	"description": "Automaticly optimise all uploaded & resampled images in SilverStripe",
+	"type": "silverstripe-vendormodule",
+	"homepage": "https://github.com/axllent/silverstripe-image-optimiser",
+	"keywords": ["silverstripe", "upload", "image", "compress", "optimisation"],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Ralph Slooten",
+			"homepage" : "http://www.axllent.org/"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/axllent/silverstripe-image-optimiser/issues"
+	},
+    "require": {
+        "silverstripe/framework": "^4.0",
+        "silverstripe/assets": "*",
+        "spatie/image-optimizer": "^1.1.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "showpro\\ImageOptimiser\\": "src/"
+        }
+    }
+}
