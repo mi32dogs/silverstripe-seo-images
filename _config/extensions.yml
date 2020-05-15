@@ -1,3 +1,7 @@
+SilverStripe\Assets\File:
+  allowed_extensions:
+    - webp
+
 ---
 Name: imageoptimiserflysystemassetstore
 After:

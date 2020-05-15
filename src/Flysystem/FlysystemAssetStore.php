@@ -1,8 +1,14 @@
 <?php
-namespace Axllent\ImageOptimiser\Flysystem;
+namespace ShowPro\ImageOptimiser\Flysystem;
 
+use League\Flysystem\Filesystem;
+use SilverStripe\Assets\FilenameParsing\FileResolutionStrategy;
+use SilverStripe\Assets\FilenameParsing\ParsedFileID;
 use SilverStripe\Assets\Flysystem\FlysystemAssetStore as SS_FlysystemAssetStore;
+use SilverStripe\Assets\Storage\AssetStore;
+use SilverStripe\Assets\Storage\FileHashingService;
 use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Injector\Injector;
 use Spatie\ImageOptimizer\OptimizerChain;
 
 /**
@@ -43,8 +49,15 @@ class FlysystemAssetStore extends SS_FlysystemAssetStore
         ],
     ];
 
+    private static $webp_default_quality = 80;
+
+    public function __construct()
+    {
+        $this->webp_quality = $this->config()->webp_default_quality;
+    }
+
     /**
-     * Asset Store file from local file
+     * Asset Store file from local file Optimize file after upload
      *
      * @param String $path     Local path
      * @param String $filename Optional filename
@@ -58,8 +71,13 @@ class FlysystemAssetStore extends SS_FlysystemAssetStore
     {
         $this->_optimisePath($path, $filename);
 
+        /*if (isset($config['visibility']) && $config['visibility'] === self::VISIBILITY_PUBLIC) {
+            $this->createWebPImage( $path, $filename, $hash, $variant, $config );
+        }*/
+
         return parent::setFromLocalFile($path, $filename, $hash, $variant, $config);
     }
+
 
     /**
      * Asset Store file from string
@@ -79,12 +97,75 @@ class FlysystemAssetStore extends SS_FlysystemAssetStore
             $tmp_file  = TEMP_PATH . DIRECTORY_SEPARATOR . 'raw_' . uniqid() . '.' . $extension;
             file_put_contents($tmp_file, $data);
             $this->_optimisePath($tmp_file, $filename);
+
+            $fileID = $this->getFileID($filename, $hash);
+            if ($this->getPublicFilesystem()->has($fileID)) {
+                $this->createWebPImage( $tmp_file, $filename, $hash, $variant, $config );
+            }
+
             $data = file_get_contents($tmp_file);
             unlink($tmp_file);
         }
 
+
         return parent::setFromString($data, $filename, $hash, $variant, $config);
     }
+
+
+    /**
+     * Move a file and its associated variant from one file store to another adjusting the file name format.
+     * @param ParsedFileID $parsedFileID
+     * @param Filesystem $from
+     * @param FileResolutionStrategy $fromStrategy
+     * @param Filesystem $to
+     * @param FileResolutionStrategy $toStrategy
+     */
+    protected function moveBetweenFileStore(
+        ParsedFileID $parsedFileID,
+        Filesystem $from,
+        FileResolutionStrategy $fromStrategy,
+        Filesystem $to,
+        FileResolutionStrategy $toStrategy,
+        $swap = false
+    ) {
+        /** @var FileHashingService $hasher */
+        $hasher = Injector::inst()->get(FileHashingService::class);
+
+        // Let's find all the variants on the origin store ... those need to be moved to the destination
+        /** @var ParsedFileID $variantParsedFileID */
+        foreach ($fromStrategy->findVariants($parsedFileID, $from) as $variantParsedFileID) {
+            // Copy via stream
+            $fromFileID = $variantParsedFileID->getFileID();
+            $toFileID = $toStrategy->buildFileID($variantParsedFileID);
+
+            $stream = $from->readStream($fromFileID);
+            $to->putStream($toFileID, $stream);
+
+            if (is_resource($stream)) {
+                fclose($stream);
+            }
+
+            // Remove the origin file and keep the file ID
+            $idsToDelete[] = $fromFileID;
+            $from->delete($fromFileID);
+
+            $hasher->move($fromFileID, $from, $toFileID, $to);
+            $this->truncateDirectory(dirname($fromFileID), $from);
+
+            $copyFrom = $from->getConfig();
+            if($copyFrom->get('visibility')!='public'){
+                $this->createWebPImageFromFile($toFileID, $variantParsedFileID->getHash());
+            }else{
+                $orgpath = $this->createWebPName('.//assets/'.$fromFileID);
+                if (file_exists($orgpath)) {
+                    $foo = unlink( $orgpath  );
+                }
+
+            }
+
+        }
+    }
+
 
     /**
      * Optimise a file path
@@ -131,5 +212,77 @@ class FlysystemAssetStore extends SS_FlysystemAssetStore
         }
 
         unlink($tmp_file);
+    }
+
+
+    /**
+     * @param $path
+     * @param $filename
+     * @param $hash
+     * @param bool $variant
+     */
+    public function createWebPImage($path, $filename, $hash, $variant = false)
+    {
+        if (function_exists('imagewebp') && function_exists('imagecreatefromjpeg') && function_exists('imagecreatefrompng')) {
+            $orgpath = './'.$this->getAsURL($filename, $hash, $variant);
+
+
+
+            list($width, $height, $type, $attr) = getimagesize($path);
+
+            switch ($type) {
+                case 2:
+                    $img = imagecreatefromjpeg($path);
+                    imagewebp($img, $this->createWebPName($orgpath), $this->webp_quality);
+                    break;
+                case 3:
+                    $img = imagecreatefrompng($path);
+                    imagesavealpha($img, true); // save alphablending setting (important)
+                    imagewebp($img, $this->createWebPName($orgpath), $this->webp_quality);
+
+            }
+            imagedestroy($img);
+        }
+    }
+
+    /**
+     * @param $filename
+     * @param $hash
+     */
+    public function createWebPImageFromFile($filename, $hash)
+    {
+        if (function_exists('imagewebp') && function_exists('imagecreatefromjpeg') && function_exists('imagecreatefrompng')) {
+            $orgpath = './/assets/'.$filename;
+
+            list($width, $height, $type, $attr) = getimagesize($orgpath);
+
+            $img ='';
+
+            switch ($type) {
+                case 2:
+                    $img = imagecreatefromjpeg($orgpath);
+                    imagewebp($img, $this->createWebPName($orgpath), $this->webp_quality);
+                    break;
+                case 3:
+                    $img = imagecreatefrompng($orgpath);
+                    imagesavealpha($img, true); // save alphablending setting (important)
+                    imagewebp($img, $this->createWebPName($orgpath), $this->webp_quality);
+
+            }
+            imagedestroy($img);
+        }
+    }
+
+    /**
+     * @param $filename
+     *
+     * @return string
+     */
+    public function createWebPName($filename)
+    {
+        $picname = pathinfo($filename, PATHINFO_FILENAME);
+        $directory = pathinfo($filename, PATHINFO_DIRNAME);
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        return $directory.'/'.$picname.'_'.$extension.'.webp';
     }
 }
