@@ -10,6 +10,8 @@ use SilverStripe\Assets\Storage\FileHashingService;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injector;
 use Spatie\ImageOptimizer\OptimizerChain;
+use WebPConvert\Convert\Exceptions\ConversionFailedException;
+use WebPConvert\WebPConvert;
 
 /**
  * Optimised Flysystem AssetStore
@@ -155,7 +157,7 @@ class FlysystemAssetStore extends SS_FlysystemAssetStore
             $copyFrom = $from->getConfig();
             if($copyFrom->get('visibility')!='public'){
                 $this->createWebPImage(
-                    PUBLIC_PATH.'/assets/',
+                    PUBLIC_PATH.'/assets/'.$variantParsedFileID->getFilename(),
                     $variantParsedFileID->getFilename(),
                     $variantParsedFileID->getHash(),
                     $variantParsedFileID->getVariant(),
@@ -231,10 +233,15 @@ class FlysystemAssetStore extends SS_FlysystemAssetStore
     {
         if (function_exists('imagewebp') && function_exists('imagecreatefromjpeg') && function_exists('imagecreatefrompng')) {
             $orgpath = './'.$this->getAsURL($filename, $hash, $variant);
+            $destination = $this->createWebPName($orgpath);
+            $options = [];
 
-            list($width, $height, $type, $attr) = getimagesize($orgpath);
+            WebPConvert::convert( $path, $destination, $options );
+            //list($width, $height, $type, $attr) = getimagesize($orgpath);
             $img = '';
-            switch ($type) {
+
+
+            /*switch ($type) {
                 case 2:
                     $img = imagecreatefromjpeg($orgpath);
                     imagewebp($img, $this->createWebPName($orgpath), $this->webp_quality);
@@ -245,7 +252,7 @@ class FlysystemAssetStore extends SS_FlysystemAssetStore
                     imagewebp($img, $this->createWebPName($orgpath), $this->webp_quality);
 
             }
-            imagedestroy($img);
+            imagedestroy($img);*/
         }
     }
 
@@ -289,4 +296,5 @@ class FlysystemAssetStore extends SS_FlysystemAssetStore
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         return $directory.'/'.$picname.'_'.$extension.'.webp';
     }
+
 }
