@@ -154,7 +154,13 @@ class FlysystemAssetStore extends SS_FlysystemAssetStore
 
             $copyFrom = $from->getConfig();
             if($copyFrom->get('visibility')!='public'){
-                $this->createWebPImageFromFile($toFileID, $variantParsedFileID->getHash());
+                $this->createWebPImage(
+                    PUBLIC_PATH.'/assets/',
+                    $variantParsedFileID->getFilename(),
+                    $variantParsedFileID->getHash(),
+                    $variantParsedFileID->getVariant(),
+                    [] );
+                //$this->createWebPImageFromFile($toFileID, $variantParsedFileID->getHash());
             }else{
                 $orgpath = $this->createWebPName('.//assets/'.$fromFileID);
                 if (file_exists($orgpath)) {
@@ -226,17 +232,15 @@ class FlysystemAssetStore extends SS_FlysystemAssetStore
         if (function_exists('imagewebp') && function_exists('imagecreatefromjpeg') && function_exists('imagecreatefrompng')) {
             $orgpath = './'.$this->getAsURL($filename, $hash, $variant);
 
-
-
-            list($width, $height, $type, $attr) = getimagesize($path);
-
+            list($width, $height, $type, $attr) = getimagesize($orgpath);
+            $img = '';
             switch ($type) {
                 case 2:
-                    $img = imagecreatefromjpeg($path);
+                    $img = imagecreatefromjpeg($orgpath);
                     imagewebp($img, $this->createWebPName($orgpath), $this->webp_quality);
                     break;
                 case 3:
-                    $img = imagecreatefrompng($path);
+                    $img = imagecreatefrompng($orgpath);
                     imagesavealpha($img, true); // save alphablending setting (important)
                     imagewebp($img, $this->createWebPName($orgpath), $this->webp_quality);
 
