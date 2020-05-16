@@ -73,10 +73,6 @@ class FlysystemAssetStore extends SS_FlysystemAssetStore
     {
         $this->_optimisePath($path, $filename);
 
-        /*if (isset($config['visibility']) && $config['visibility'] === self::VISIBILITY_PUBLIC) {
-            $this->createWebPImage( $path, $filename, $hash, $variant, $config );
-        }*/
-
         return parent::setFromLocalFile($path, $filename, $hash, $variant, $config);
     }
 
@@ -237,50 +233,7 @@ class FlysystemAssetStore extends SS_FlysystemAssetStore
             $options = [];
 
             WebPConvert::convert( $path, $destination, $options );
-            //list($width, $height, $type, $attr) = getimagesize($orgpath);
-            $img = '';
 
-
-            /*switch ($type) {
-                case 2:
-                    $img = imagecreatefromjpeg($orgpath);
-                    imagewebp($img, $this->createWebPName($orgpath), $this->webp_quality);
-                    break;
-                case 3:
-                    $img = imagecreatefrompng($orgpath);
-                    imagesavealpha($img, true); // save alphablending setting (important)
-                    imagewebp($img, $this->createWebPName($orgpath), $this->webp_quality);
-
-            }
-            imagedestroy($img);*/
-        }
-    }
-
-    /**
-     * @param $filename
-     * @param $hash
-     */
-    public function createWebPImageFromFile($filename, $hash)
-    {
-        if (function_exists('imagewebp') && function_exists('imagecreatefromjpeg') && function_exists('imagecreatefrompng')) {
-            $orgpath = './/assets/'.$filename;
-
-            list($width, $height, $type, $attr) = getimagesize($orgpath);
-
-            $img ='';
-
-            switch ($type) {
-                case 2:
-                    $img = imagecreatefromjpeg($orgpath);
-                    imagewebp($img, $this->createWebPName($orgpath), $this->webp_quality);
-                    break;
-                case 3:
-                    $img = imagecreatefrompng($orgpath);
-                    imagesavealpha($img, true); // save alphablending setting (important)
-                    imagewebp($img, $this->createWebPName($orgpath), $this->webp_quality);
-
-            }
-            imagedestroy($img);
         }
     }
 
