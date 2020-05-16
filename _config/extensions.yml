@@ -10,4 +10,4 @@ After:
 ---
 SilverStripe\Core\Injector\Injector:
   SilverStripe\Assets\Storage\AssetStore:
-    class: Axllent\ImageOptimiser\Flysystem\FlysystemAssetStore
+    class: showpro\ImageOptimiser\Flysystem\FlysystemAssetStore

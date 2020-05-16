@@ -1,7 +1,7 @@
 <?php
-namespace Axllent\ImageOptimiser\Tasks;
+namespace showpro\ImageOptimiser\Tasks;
 
-use Axllent\ImageOptimiser\Flysystem\FlysystemAssetStore as IOFlysystemAssetStore;
+use showpro\ImageOptimiser\Flysystem\FlysystemAssetStore as IOFlysystemAssetStore;
 use ReflectionMethod;
 use SilverStripe\Assets\Flysystem\FlysystemAssetStore;
 use SilverStripe\Assets\Image;
