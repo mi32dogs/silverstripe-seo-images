@@ -6,7 +6,7 @@ This Module is Ralph Slooten's [axllent/silverstripe-image-optimiser](https://gi
 This module automatically optimise, compress and generates an WebP images from both uploaded as well as any resampled (cropped, scaled etc) images in SilverStripe.
 
 Images (JPG, PNG & GIF) are automatically
-optimised, provided you have the correct binaries installed (see "Installation" below) and it also generates WebP images for all optimized and compressed (JPG & PNG) images. More Information about webp images [https://developers.google.com/speed/webp/](https://developers.google.com/speed/webp/)
+optimised, provided you have the correct binaries installed (see "Installation" below) and it also generates WebP images for all optimized and compressed (JPG & PNG) images. It also adds  More Information about webp images [https://developers.google.com/speed/webp/](https://developers.google.com/speed/webp/)
 
 The module overrides the default `FlysystemAssetStore` to first optimise the image
 before adding the image to the store, then if the image is a JPG or PNG it will create a WebP image. It works transparently.
@@ -18,8 +18,7 @@ before adding the image to the store, then if the image is a JPG or PNG it will 
 - [spatie/image-optimizer](https://github.com/spatie/image-optimizer)
 - [rosell-dk/webp-convert](https://github.com/rosell-dk/webp-convert)
 - JpegOptim, Optipng, Pngquant 2 & Gifsicle binaries (see below)
-- GDLib with webp Extension
-
+- vips, imagick, gmagick, GDLib with webp Extension (see WebP creation tools)
 
 ## Optimisation tools
 
