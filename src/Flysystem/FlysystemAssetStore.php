@@ -247,7 +247,7 @@ class FlysystemAssetStore extends SS_FlysystemAssetStore
         $picname = pathinfo($filename, PATHINFO_FILENAME);
         $directory = pathinfo($filename, PATHINFO_DIRNAME);
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
-        return $directory.'/'.$picname.'_'.$extension.'.webp';
+        return $directory.'/'.$picname.'.'.$extension.'.webp';
     }
 
 }
