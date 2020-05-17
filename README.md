@@ -1,7 +1,7 @@
 # Creates Optimised images for SEO in SilverStripe
 
 
-This Module is an extension of Ralph Slooten's [axllent/silverstripe-image-optimiser](https://github.com/axllent/silverstripe-image-optimiser).
+This Module is Ralph Slooten's [axllent/silverstripe-image-optimiser](https://github.com/axllent/silverstripe-image-optimiser) with a module to generate WebP images of all optimized images.
 
 This module automatically optimise, compress and generates an WebP images from both uploaded as well as any resampled (cropped, scaled etc) images in SilverStripe.
 
@@ -14,8 +14,9 @@ before adding the image to the store, then if the image is a JPG or PNG it will 
 
 ## Requirements
 
-- `silverstripe/framework` ^4.2
-- [spatie/image-optimizer](https://github.com/spatie/image-optimizer) - automatically installed
+- [silverstripe/silverstripe-framework](https://github.com/silverstripe/silverstripe-framework) ^4.2
+- [spatie/image-optimizer](https://github.com/spatie/image-optimizer)
+- [rosell-dk/webp-convert](https://github.com/rosell-dk/webp-convert)
 - JpegOptim, Optipng, Pngquant 2 & Gifsicle binaries (see below)
 - GDLib with webp Extension
 
@@ -35,10 +36,10 @@ following optimisers if they are both present and in your default path on your s
 
 The module uses [rosell-dk/webp-convert](https://github.com/rosell-dk/webp-convert) to generate WebP images. The library can convert using the following methods:
 
-- *vips* (using [Vips PHP extension](https://github.com/libvips/php-vips-ext))
-- *imagick* (using [Imagick PHP extension](https://github.com/Imagick/imagick))
-- *gmagick* (using [Gmagick PHP extension](https://www.php.net/manual/en/book.gmagick.php))
-- *gd* (using the [Gd PHP extension](https://www.php.net/manual/en/book.image.php))
+- vips (using [Vips PHP extension](https://github.com/libvips/php-vips-ext))
+- imagick (using [Imagick PHP extension](https://github.com/Imagick/imagick))
+- gmagick (using [Gmagick PHP extension](https://www.php.net/manual/en/book.gmagick.php))
+- gd (using the [Gd PHP extension](https://www.php.net/manual/en/book.image.php))
 
 
 ## Installation

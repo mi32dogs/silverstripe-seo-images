@@ -16,7 +16,7 @@
     "require": {
         "silverstripe/framework": "^4.2",
         "silverstripe/assets": "*",
-        "spatie/image-optimizer": "^1.1.4",
+        "spatie/image-optimizer": "^1.2",
         "rosell-dk/webp-convert": "^2.3"
     },
     "autoload": {
