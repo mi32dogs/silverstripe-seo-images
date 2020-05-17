@@ -1,18 +1,17 @@
 {
-	"name": "showpro/silverstripe-image-optimiser",
-	"description": "Automaticly optimise all uploaded & resampled images in SilverStripe",
+	"name": "showpro/silverstripe-seo-images",
+	"description": "Automaticly optimise and generates WebP images of all uploaded & resampled images in SilverStripe",
 	"type": "silverstripe-vendormodule",
-	"homepage": "https://github.com/axllent/silverstripe-image-optimiser",
-	"keywords": ["silverstripe", "upload", "image", "compress", "optimisation"],
+	"homepage": "https://github.com/mi32dogs/silverstripe-seo-images",
+	"keywords": ["silverstripe", "upload", "image", "compress", "optimisation", "webp"],
 	"license": "MIT",
 	"authors": [
 		{
-			"name": "Ralph Slooten",
-			"homepage" : "http://www.axllent.org/"
+			"name": "Rob van Tuin",
 		}
 	],
 	"support": {
-		"issues": "https://github.com/axllent/silverstripe-image-optimiser/issues"
+		"issues": "https://github.com/mi32dogs/silverstripe-seo-images/issues"
 	},
     "require": {
         "silverstripe/framework": "^4.0",
@@ -22,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "showpro\\ImageOptimiser\\": "src/"
+            "showpro\\SEOImages\\": "src/"
         }
     }
 }

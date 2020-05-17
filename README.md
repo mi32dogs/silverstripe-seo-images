@@ -1,10 +1,9 @@
-# Optimised images for SilverStripe
+# Creates Optimised images for SEO in SilverStripe
 
 
-This Module is a combination of Ralph Slooten's [axllent/silverstripe-image-optimiser](https://github.com/axllent/silverstripe-image-optimiser) and Bastian Fritsch's [nomidi/silverstripe-webp-image](https://github.com/nomidi/silverstripe-webp-image)
+This Module is an extension of Ralph Slooten's [axllent/silverstripe-image-optimiser](https://github.com/axllent/silverstripe-image-optimiser).
 
-This module automatically optimise, compress and generates WebP images from both uploaded as well as any resampled
-(cropped, scaled etc) images in SilverStripe.
+This module automatically optimise, compress and generates an WebP images from both uploaded as well as any resampled (cropped, scaled etc) images in SilverStripe.
 
 Images (JPG, PNG & GIF) are automatically
 optimised, provided you have the correct binaries installed (see "Installation" below) and it also generates WebP images for all optimized and compressed (JPG & PNG) images. More Information about webp images [https://developers.google.com/speed/webp/](https://developers.google.com/speed/webp/)
@@ -30,6 +29,16 @@ following optimisers if they are both present and in your default path on your s
 - [Optipng](http://optipng.sourceforge.net/)
 - [Pngquant 2](https://pngquant.org/)
 - [Gifsicle](http://www.lcdf.org/gifsicle/)
+
+
+## WebP creation tools
+
+The module uses [rosell-dk/webp-convert](https://github.com/rosell-dk/webp-convert) to generate WebP images. The library can convert using the following methods:
+
+- *vips* (using [Vips PHP extension](https://github.com/libvips/php-vips-ext))
+- *imagick* (using [Imagick PHP extension](https://github.com/Imagick/imagick))
+- *gmagick* (using [Gmagick PHP extension](https://www.php.net/manual/en/book.gmagick.php))
+- *gd* (using the [Gd PHP extension](https://www.php.net/manual/en/book.image.php))
 
 
 ## Installation
