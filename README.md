@@ -44,7 +44,7 @@ The module uses [rosell-dk/webp-convert](https://github.com/rosell-dk/webp-conve
 ## Installation
 
 ```shell
-composer require axllent/silverstripe-image-optimiser
+composer require mi32dogs/silverstripe-seo-images
 ```
 
 ### Installing the utilities on Ubuntu:
@@ -65,7 +65,3 @@ apk add jpegoptim optipng pngquant gifsicle
 
 Assuming you have the necessary binaries installed, it should "just work" with the default settings
 once you have flushed your SilverStripe installation.
-
-
-For custom optimisation settings, please refer to the
-[Configuration documentation](docs/en/Configuration.md).
