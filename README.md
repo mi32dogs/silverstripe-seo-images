@@ -14,7 +14,7 @@ before adding the image to the store, then if the image is a JPG or PNG it will 
 
 ## Requirements
 
-- `silverstripe/assets` ^4.2
+- `silverstripe/framework` ^4.2
 - [spatie/image-optimizer](https://github.com/spatie/image-optimizer) - automatically installed
 - JpegOptim, Optipng, Pngquant 2 & Gifsicle binaries (see below)
 - GDLib with webp Extension
