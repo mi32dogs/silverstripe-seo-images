@@ -44,7 +44,7 @@ The module uses [rosell-dk/webp-convert](https://github.com/rosell-dk/webp-conve
 ## Installation
 
 ```shell
-composer require mi32dogs/silverstripe-seo-images
+composer require showpro/silverstripe-seo-images
 ```
 
 ### Installing the utilities on Ubuntu:
