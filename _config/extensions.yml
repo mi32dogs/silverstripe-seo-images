@@ -3,7 +3,7 @@ SilverStripe\Assets\File:
     - webp
 
 ---
-Name: imageoptimiserflysystemassetstore
+Name: silverstripeseoimages
 After:
   - "assetscore"
   - "assetstore"
